@@ -4,12 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wordle</title>
-    <link rel="stylesheet" href="style.css"> </head>
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
 
-<div id="grid"></div>
-<div id="message"></div>
-<div id="keyboard"></div>
+<div id="game-container">  </div>
+    <div id="grid"></div>
+    <div id="message"></div>
+    <div id="keyboard"></div>
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close-button" onclick="closePopup()">&times;</span>
+            <p id="popup-message"></p>
+            <button id="popup-next-level" onclick="nextLevel()">Next Level</button>
+            <button id="popup-try-again" onclick="resetLevel()">Try Again</button>
+        </div>
+    </div>
+</div>
 
 <script src="script.js"></script>
 
