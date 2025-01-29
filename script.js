@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const grid = document.getElementById('grid');
     const keyboard = document.getElementById('keyboard');
     const message = document.getElementById('message');
-
+    
     const WORD_LENGTH = 5;
     const GRID_SIZE = 6;
 
@@ -214,11 +214,12 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('popup').style.display = 'none';
     }
 
-   document.getElementById('popup-next-level').addEventListener('click', closePopup);
+    document.getElementById('popup-next-level').addEventListener('click', closePopup);
     document.getElementById('popup-try-again').addEventListener('click', closePopup);
 
 
-    createGrid(); // Create the grid FIRST
-    createKeyboard(); // Then create the keyboard
-    disableKeyboard(); // THEN disable the keyboard (now that it exists)
+    createGrid();
+    createKeyboard();
     showMessage(levels[currentLevel].message, true); // Initial message
+
+}); // End of DOMContentLoaded
