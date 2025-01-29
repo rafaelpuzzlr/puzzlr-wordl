@@ -1,6 +1,6 @@
-# Puzzlr Game
+# Wordle by Puzzlr Games AB
 
-A Puzzlr-like word game built with JavaScript.
+A wordle-like word game built with JavaScript.
 
 ## How to Play
 - Guess the hidden 5-letter word.
