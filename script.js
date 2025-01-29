@@ -40,6 +40,7 @@ function handleKeyPress(key) {
   if (currentCol < WORD_LENGTH) {
     const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${currentCol}']`);
     cell.textContent = key;
+    cell.classList.add('filled');
     currentCol++;
   }
 }
@@ -62,12 +63,12 @@ function checkGuess() {
     const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${col}']`);
     const letter = cell.textContent;
     if (letter === targetWord[col]) {
-      cell.style.backgroundColor = '#4caf50'; // Green for correct
+      cell.classList.add('correct');
     } else if (targetWord.includes(letter)) {
-      cell.style.backgroundColor = '#ffeb3b'; // Yellow for misplaced
+      cell.classList.add('misplaced');
       correct = false;
     } else {
-      cell.style.backgroundColor = '#ccc'; // Gray for incorrect
+      cell.classList.add('incorrect');
       correct = false;
     }
   }
