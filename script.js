@@ -4,7 +4,7 @@ const message = document.getElementById('message');
 
 const WORD_LENGTH = 5;
 const GRID_SIZE = 6; // Wordle uses 6 rows
-const targetWord = 'CRANE'; // Example target word (can be randomized later)
+const targetWord = 'HARRY'; // Example target word (can be randomized later)
 
 // Initialize the grid
 function createGrid() {
@@ -44,7 +44,7 @@ function createKeyboard() {
   const keys = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
     ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-    ['Enter', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Backspace']
+    ['Enter', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Delete']
   ];
 
   keyboard.style.display = 'flex';
@@ -94,7 +94,7 @@ let currentRow = 0;
 let currentCol = 0;
 
 function handleKeyPress(key) {
-  if (key === 'Backspace') {
+  if (key === 'Delete') {
     if (currentCol > 0) {
       currentCol--;
       const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${currentCol}']`);
