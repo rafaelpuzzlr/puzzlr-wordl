@@ -1,4 +1,4 @@
-# Wordle by Puzzlr Games AB
+# Wordle by Puzzlr
 
 A wordle-like word game built with JavaScript.
 
