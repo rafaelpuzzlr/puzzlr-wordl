@@ -20,6 +20,10 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentCol = 0;
     let gameOver = false;
 
+    // *** ATTACH EVENT LISTENERS FOR POPUP BUTTONS FIRST ***
+    document.getElementById('popup-next-level').addEventListener('click', closePopup);
+    document.getElementById('popup-try-again').addEventListener('click', resetLevel); // Correct event for Try Again
+
     function createGrid() {
         const titleElement = document.createElement('h1');
         titleElement.id = 'title';
@@ -94,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
             keyboard.appendChild(rowDiv);
         });
 
-        setTimeout(disableKeyboard, 0); // Correct placement of disableKeyboard
+        setTimeout(disableKeyboard, 0);
     }
 
     function handleKeyPress(key) {
@@ -103,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (key === 'Backspace') {
             if (currentCol > 0) {
                 currentCol--;
-                const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${currentCol}']`);
+                const cell = document.querySelector(`.cell[data-row='<span class="math-inline">\{currentRow\}'\]\[data\-col\='</span>{currentCol}']`);
                 cell.textContent = '';
             }
         } else if (key === 'Enter') {
@@ -115,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 showMessage('Not enough letters!');
             }
         } else if (currentCol < WORD_LENGTH) {
-            const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${currentCol}']`);
+            const cell = document.querySelector(`.cell[data-row='<span class="math-inline">\{currentRow\}'\]\[data\-col\='</span>{currentCol}']`);
             cell.textContent = key;
             currentCol++;
         }
@@ -124,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function checkGuess() {
         let correct = true;
         for (let col = 0; col < WORD_LENGTH; col++) {
-            const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${col}']`);
+            const cell = document.querySelector(`.cell[data-row='<span class="math-inline">\{currentRow\}'\]\[data\-col\='</span>{col}']`);
             const letter = cell.textContent;
             if (letter === targetWord[col]) {
                 cell.classList.add('correct');
@@ -212,18 +216,3 @@ document.addEventListener('DOMContentLoaded', function() {
                 message.textContent = '';
             }, 3000);
         }
-    }
-
-    function closePopup() {
-        document.getElementById('popup').style.display = 'none';
-    }
-
-    document.getElementById('popup-next-level').addEventListener('click', closePopup);
-    document.getElementById('popup-try-again').addEventListener('click', closePopup);
-
-
-    createGrid();
-    createKeyboard();
-    showMessage(levels[currentLevel].message, true);
-
-});
