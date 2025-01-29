@@ -4,23 +4,27 @@ const submitButton = document.getElementById('submit-button');
 const message = document.getElementById('message');
 
 const WORD_LENGTH = 5;
-const GRID_SIZE = 5;
-const targetWord = 'CRANE'; // Example target word (can be randomized later)
+const GRID_SIZE = 6;
+const targetWord = 'CRANE';
+let currentRow = 0;
+let currentCol = 0;
+let guess = '';
 
-// Initialize the grid
 function createGrid() {
   for (let row = 0; row < GRID_SIZE; row++) {
+    const rowDiv = document.createElement('div');
+    rowDiv.classList.add('row');
     for (let col = 0; col < WORD_LENGTH; col++) {
       const cell = document.createElement('div');
       cell.classList.add('cell');
       cell.dataset.row = row;
       cell.dataset.col = col;
-      grid.appendChild(cell);
+      rowDiv.appendChild(cell);
     }
+    grid.appendChild(rowDiv);
   }
 }
 
-// Initialize the keyboard
 function createKeyboard() {
   const keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   keys.forEach(key => {
@@ -32,33 +36,27 @@ function createKeyboard() {
   });
 }
 
-// Handle key press (from keyboard or virtual keyboard)
-let currentRow = 0;
-let currentCol = 0;
-
 function handleKeyPress(key) {
   if (currentCol < WORD_LENGTH) {
     const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${currentCol}']`);
     cell.textContent = key;
-    cell.classList.add('filled');
+    guess += key;
     currentCol++;
   }
 }
 
-// Handle submit
 submitButton.addEventListener('click', () => {
-  if (currentCol === WORD_LENGTH) {
+  if (guess.length === WORD_LENGTH) {
     checkGuess();
     currentRow++;
     currentCol = 0;
+    guess = '';
   } else {
     showMessage('Not enough letters!');
   }
 });
 
-// Check the guess against the target word
 function checkGuess() {
-  let correct = true;
   for (let col = 0; col < WORD_LENGTH; col++) {
     const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${col}']`);
     const letter = cell.textContent;
@@ -66,38 +64,27 @@ function checkGuess() {
       cell.classList.add('correct');
     } else if (targetWord.includes(letter)) {
       cell.classList.add('misplaced');
-      correct = false;
     } else {
       cell.classList.add('incorrect');
-      correct = false;
     }
   }
-
-  if (correct) {
+  if (guess === targetWord) {
     showMessage('You win!');
-    disableKeyboard(); // Disable keyboard after winning
+    disableKeyboard();
   } else if (currentRow === GRID_SIZE - 1) {
     showMessage(`Game over! The word was ${targetWord}.`);
-    disableKeyboard(); // Disable keyboard after losing
+    disableKeyboard();
   }
 }
 
-// Show a message and clear it after a delay
 function showMessage(text) {
   message.textContent = text;
-  setTimeout(() => {
-    message.textContent = '';
-  }, 3000);
+  setTimeout(() => { message.textContent = ''; }, 3000);
 }
 
-// Disable keyboard after game ends
 function disableKeyboard() {
-  const keys = document.querySelectorAll('.key');
-  keys.forEach(key => {
-    key.disabled = true;
-  });
+  document.querySelectorAll('.key').forEach(key => key.disabled = true);
 }
 
-// Initialize the game
 createGrid();
 createKeyboard();
