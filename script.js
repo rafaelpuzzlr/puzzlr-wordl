@@ -4,11 +4,16 @@ const submitButton = document.getElementById('submit-button');
 const message = document.getElementById('message');
 
 const WORD_LENGTH = 5;
-const GRID_SIZE = 5;
+const GRID_SIZE = 6; // Wordle uses 6 rows
 const targetWord = 'CRANE'; // Example target word (can be randomized later)
 
 // Initialize the grid
 function createGrid() {
+  grid.style.display = 'grid';
+  grid.style.gridTemplateColumns = `repeat(${WORD_LENGTH}, 1fr)`;
+  grid.style.gap = '5px';
+  grid.style.marginBottom = '20px';
+
   for (let row = 0; row < GRID_SIZE; row++) {
     for (let col = 0; col < WORD_LENGTH; col++) {
       const cell = document.createElement('div');
@@ -22,12 +27,12 @@ function createGrid() {
       cell.style.display = 'flex';
       cell.style.justifyContent = 'center';
       cell.style.alignItems = 'center';
-      cell.style.fontSize = '24px';
+      cell.style.fontSize = '32px';
       cell.style.fontWeight = 'bold';
       cell.style.backgroundColor = '#fff';
-      cell.style.border = '2px solid #ddd';
+      cell.style.border = '2px solid #d3d6da';
       cell.style.textTransform = 'uppercase';
-      cell.style.color = '#333';
+      cell.style.color = '#000';
       cell.style.transition = 'background-color 0.3s ease, border-color 0.3s ease';
 
       grid.appendChild(cell);
@@ -40,15 +45,19 @@ function createKeyboard() {
   const keys = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
     ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-    ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
+    ['Enter', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Backspace']
   ];
+
+  keyboard.style.display = 'flex';
+  keyboard.style.flexDirection = 'column';
+  keyboard.style.alignItems = 'center';
+  keyboard.style.gap = '6px';
 
   keys.forEach((row, rowIndex) => {
     const rowDiv = document.createElement('div');
     rowDiv.style.display = 'flex';
     rowDiv.style.justifyContent = 'center';
     rowDiv.style.gap = '6px';
-    rowDiv.style.marginBottom = '6px';
 
     row.forEach(key => {
       const button = document.createElement('button');
@@ -56,16 +65,22 @@ function createKeyboard() {
       button.classList.add('key');
 
       // Add styling for the keyboard keys
-      button.style.width = '40px';
-      button.style.height = '50px';
+      button.style.padding = '10px 15px';
       button.style.fontSize = '16px';
       button.style.fontWeight = 'bold';
-      button.style.backgroundColor = '#f0f0f0';
-      button.style.border = '2px solid #ddd';
+      button.style.backgroundColor = '#d3d6da';
+      button.style.border = 'none';
+      button.style.borderRadius = '5px';
       button.style.cursor = 'pointer';
       button.style.textTransform = 'uppercase';
-      button.style.color = '#333';
-      button.style.transition = 'background-color 0.3s ease, border-color 0.3s ease';
+      button.style.color = '#000';
+      button.style.transition = 'background-color 0.3s ease';
+
+      // Special styling for Enter and Backspace keys
+      if (key === 'Enter' || key === 'Backspace') {
+        button.style.padding = '10px 20px';
+        button.style.fontSize = '14px';
+      }
 
       button.addEventListener('click', () => handleKeyPress(key));
       rowDiv.appendChild(button);
@@ -80,24 +95,26 @@ let currentRow = 0;
 let currentCol = 0;
 
 function handleKeyPress(key) {
-  if (currentCol < WORD_LENGTH) {
+  if (key === 'Backspace') {
+    if (currentCol > 0) {
+      currentCol--;
+      const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${currentCol}']`);
+      cell.textContent = '';
+    }
+  } else if (key === 'Enter') {
+    if (currentCol === WORD_LENGTH) {
+      checkGuess();
+      currentRow++;
+      currentCol = 0;
+    } else {
+      showMessage('Not enough letters!');
+    }
+  } else if (currentCol < WORD_LENGTH) {
     const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${currentCol}']`);
     cell.textContent = key;
-    cell.classList.add('filled');
     currentCol++;
   }
 }
-
-// Handle submit
-submitButton.addEventListener('click', () => {
-  if (currentCol === WORD_LENGTH) {
-    checkGuess();
-    currentRow++;
-    currentCol = 0;
-  } else {
-    showMessage('Not enough letters!');
-  }
-});
 
 // Check the guess against the target word
 function checkGuess() {
@@ -106,17 +123,17 @@ function checkGuess() {
     const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${col}']`);
     const letter = cell.textContent;
     if (letter === targetWord[col]) {
-      cell.style.backgroundColor = '#4caf50'; // Green for correct
-      cell.style.borderColor = '#4caf50';
+      cell.style.backgroundColor = '#6aaa64'; // Green for correct
+      cell.style.borderColor = '#6aaa64';
       cell.style.color = '#fff';
     } else if (targetWord.includes(letter)) {
-      cell.style.backgroundColor = '#ffeb3b'; // Yellow for misplaced
-      cell.style.borderColor = '#ffeb3b';
-      cell.style.color = '#333';
+      cell.style.backgroundColor = '#c9b458'; // Yellow for misplaced
+      cell.style.borderColor = '#c9b458';
+      cell.style.color = '#fff';
       correct = false;
     } else {
-      cell.style.backgroundColor = '#ccc'; // Gray for incorrect
-      cell.style.borderColor = '#ccc';
+      cell.style.backgroundColor = '#787c7e'; // Gray for incorrect
+      cell.style.borderColor = '#787c7e';
       cell.style.color = '#fff';
       correct = false;
     }
