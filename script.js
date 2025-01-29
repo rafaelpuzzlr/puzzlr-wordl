@@ -2,16 +2,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const grid = document.getElementById('grid');
     const keyboard = document.getElementById('keyboard');
     const message = document.getElementById('message');
-    
+
     const WORD_LENGTH = 5;
     const GRID_SIZE = 6;
 
     const levels = [
-        { word: 'APPLE', message: "Let's start with an easy one!" },
-        { word: 'LIGHT', message: "A bit harder now. Good luck!" },
-        { word: 'BREAD', message: "Things are getting tricky!" },
-        { word: 'WATER', message: "Almost there. Can you crack this?" },
-        { word: 'CRANE', message: "You're a true Wordle master!" },
+        { word: 'CRANE', message: "Let's start with an easy one!" },
+        { word: 'STOUR', message: "A bit harder now. Good luck!" },
+        { word: 'GLYPH', message: "Things are getting tricky!" },
+        { word: 'FJORD', message: "Almost there. Can you crack this?" },
+        { word: 'ZAPPY', message: "You're a true Wordle master!" },
     ];
 
     let currentLevel = 0;
@@ -93,6 +93,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             keyboard.appendChild(rowDiv);
         });
+
+        setTimeout(disableKeyboard, 0); // Correct placement of disableKeyboard
     }
 
     function handleKeyPress(key) {
@@ -182,11 +184,13 @@ document.addEventListener('DOMContentLoaded', function() {
             cell.textContent = '';
             cell.classList.remove('correct', 'present', 'absent');
         });
-   }
+    }
 
-    function enableKeyboard() {
-        const keys = document.querySelectorAll('.key');
-        keys.forEach(key => key.disabled = false);
+    function enableKeyboard(){
+      const keys = document.querySelectorAll('.key');
+      keys.forEach(key => {
+        key.disabled = false;
+      });
     }
 
     function showMessage(text, isPopup = false) {
@@ -220,6 +224,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     createGrid();
     createKeyboard();
-    showMessage(levels[currentLevel].message, true); // Initial message
+    showMessage(levels[currentLevel].message, true);
 
-}); // End of DOMContentLoaded
+});
