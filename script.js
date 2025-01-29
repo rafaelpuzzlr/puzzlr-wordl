@@ -1,4 +1,3 @@
-// script.js
 const grid = document.getElementById('grid');
 const keyboard = document.getElementById('keyboard');
 const submitButton = document.getElementById('submit-button');
@@ -27,6 +26,7 @@ function createKeyboard() {
   keys.forEach(key => {
     const button = document.createElement('button');
     button.textContent = key;
+    button.classList.add('key');
     button.addEventListener('click', () => handleKeyPress(key));
     keyboard.appendChild(button);
   });
@@ -51,7 +51,7 @@ submitButton.addEventListener('click', () => {
     currentRow++;
     currentCol = 0;
   } else {
-    message.textContent = 'Not enough letters!';
+    showMessage('Not enough letters!');
   }
 });
 
@@ -73,10 +73,18 @@ function checkGuess() {
   }
 
   if (correct) {
-    message.textContent = 'You win!';
+    showMessage('You win!');
   } else if (currentRow === GRID_SIZE - 1) {
-    message.textContent = `Game over! The word was ${targetWord}.`;
+    showMessage(`Game over! The word was ${targetWord}.`);
   }
+}
+
+// Show a message and clear it after a delay
+function showMessage(text) {
+  message.textContent = text;
+  setTimeout(() => {
+    message.textContent = '';
+  }, 3000);
 }
 
 // Initialize the game
