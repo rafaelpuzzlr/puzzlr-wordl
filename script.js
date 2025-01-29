@@ -74,8 +74,10 @@ function checkGuess() {
 
   if (correct) {
     showMessage('You win!');
+    disableKeyboard(); // Disable keyboard after winning
   } else if (currentRow === GRID_SIZE - 1) {
     showMessage(`Game over! The word was ${targetWord}.`);
+    disableKeyboard(); // Disable keyboard after losing
   }
 }
 
@@ -85,6 +87,14 @@ function showMessage(text) {
   setTimeout(() => {
     message.textContent = '';
   }, 3000);
+}
+
+// Disable keyboard after game ends
+function disableKeyboard() {
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => {
+    key.disabled = true;
+  });
 }
 
 // Initialize the game
