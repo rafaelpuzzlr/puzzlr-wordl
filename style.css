@@ -1,123 +1,70 @@
-/* General Styles */
 body {
-    font-family: sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    margin: 0;
-    background-color: #f0f0f0;
-    padding: 10px; /* Reduced padding for mobile */
-    overflow-x: hidden; /* Prevent horizontal scroll on smaller screens */
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+  background-color: #f0f0f0;
 }
 
 #game-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%; /* Take full width */
-    max-width: 500px; /* Limit maximum width on larger screens */
-    margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 95%;
+  max-width: 500px;
 }
 
-/* Grid Styles */
 #grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 5px;
-    margin-bottom: 20px;
-    width: 100%; /* Ensure the grid takes up the full width */
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+  margin-bottom: 20px;
 }
 
 .cell {
-    width: 100%;
-    height: 60px; /* Adjusted height for better scaling */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px; /* Smaller font size */
-    font-weight: bold;
-    background-color: #fff;
-    border: 2px solid #d3d6da;
-    text-transform: uppercase;
-    color: #000;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  font-weight: bold;
+  background-color: #fff;
+  border: 2px solid #d3d6da;
+  text-transform: uppercase;
+  color: #000;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Keyboard Styles */
 #keyboard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
 
 .key {
-    padding: 12px 15px;
-    font-size: 16px;
-    font-weight: bold;
-    background-color: #d3d6da;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-transform: uppercase;
-    color: #000;
-    transition: background-color 0.3s ease;
-    width: 40px; /* Adjusted width for smaller screens */
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #d3d6da;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-transform: uppercase;
+  color: #000;
+  transition: background-color 0.3s ease;
 }
 
 .key:active {
-    background-color: #bbb;
+  background-color: #bbb;
 }
 
 #message {
-    margin-top: 10px;
-    font-weight: bold;
-    text-align: center;
-}
-
-/* Media Queries for Mobile Devices */
-@media (max-width: 600px) {
-    /* Reduce grid cell size */
-    .cell {
-        height: 50px; /* Smaller height for mobile */
-        font-size: 20px; /* Smaller font size */
-    }
-
-    /* Make the keyboard keys smaller and more compact */
-    .key {
-        padding: 8px 10px; /* Smaller padding */
-        font-size: 14px; /* Smaller font size */
-        width: 35px; /* Adjusted width for mobile */
-    }
-
-    /* Make the grid more compact */
-    #grid {
-        gap: 3px; /* Smaller gap between cells */
-    }
-
-    /* Adjust message font size */
-    #message {
-        font-size: 16px; /* Smaller font size for messages */
-    }
-}
-
-/* Media Queries for Larger Devices */
-@media (min-width: 601px) and (max-width: 1024px) {
-    /* Slightly larger grid cells and keys */
-    .cell {
-        height: 55px; /* Slightly larger cell height */
-        font-size: 28px; /* Slightly larger font size */
-    }
-
-    .key {
-        padding: 10px 12px; /* Medium padding */
-        font-size: 15px; /* Medium font size */
-    }
-
-    #message {
-        font-size: 18px; /* Medium font size for messages */
-    }
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: center;
 }
