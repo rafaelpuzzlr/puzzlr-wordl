@@ -1,223 +1,168 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const grid = document.getElementById('grid');
-    const keyboard = document.getElementById('keyboard');
-    const message = document.getElementById('message');
+const grid = document.getElementById('grid');
+const keyboard = document.getElementById('keyboard');
+const message = document.getElementById('message');
 
-    const WORD_LENGTH = 5;
-    const GRID_SIZE = 6;
+const WORD_LENGTH = 5;
+const GRID_SIZE = 6; // Wordle uses 6 rows
+const targetWord = 'CRANE'; // Example target word (can be randomized later)
 
-    const levels = [
-        { word: 'CRANE', message: "Let's start with an easy one!" },
-        { word: 'STOUR', message: "A bit harder now. Good luck!" },
-        { word: 'GLYPH', message: "Things are getting tricky!" },
-        { word: 'FJORD', message: "Almost there. Can you crack this?" },
-        { word: 'ZAPPY', message: "You're a true Wordle master!" },
-    ];
+// Initialize the grid
+function createGrid() {
+  grid.style.display = 'grid';
+  grid.style.gridTemplateColumns = `repeat(${WORD_LENGTH}, 1fr)`;
+  grid.style.gap = '5px';
+  grid.style.marginBottom = '20px';
 
-    let currentLevel = 0;
-    let targetWord = levels[currentLevel].word;
-    let currentRow = 0;
-    let currentCol = 0;
-    let gameOver = false;
+  for (let row = 0; row < GRID_SIZE; row++) {
+    for (let col = 0; col < WORD_LENGTH; col++) {
+      const cell = document.createElement('div');
+      cell.classList.add('cell');
+      cell.dataset.row = row;
+      cell.dataset.col = col;
 
-    // *** ATTACH EVENT LISTENERS FOR POPUP BUTTONS FIRST ***
-    document.getElementById('popup-next-level').addEventListener('click', closePopup);
-    document.getElementById('popup-try-again').addEventListener('click', resetLevel); // Correct event for Try Again
+      // Add styling for the grid cells
+      cell.style.width = '60px';
+      cell.style.height = '60px';
+      cell.style.display = 'flex';
+      cell.style.justifyContent = 'center';
+      cell.style.alignItems = 'center';
+      cell.style.fontSize = '32px';
+      cell.style.fontWeight = 'bold';
+      cell.style.backgroundColor = '#fff';
+      cell.style.border = '2px solid #d3d6da';
+      cell.style.textTransform = 'uppercase';
+      cell.style.color = '#000';
+      cell.style.transition = 'background-color 0.3s ease, border-color 0.3s ease';
 
-    function createGrid() {
-        const titleElement = document.createElement('h1');
-        titleElement.id = 'title';
-        titleElement.textContent = "Daily Wordl";
-        titleElement.style.textAlign = "center";
-        titleElement.style.marginBottom = "10px";
-        titleElement.style.fontSize = "24px";
-        document.body.insertBefore(titleElement, grid);
-
-        grid.style.display = 'grid';
-        grid.style.gridTemplateColumns = `repeat(${WORD_LENGTH}, 1fr)`;
-        grid.style.gap = '2px';
-        grid.style.marginBottom = '20px';
-        grid.style.width = `${WORD_LENGTH * 52}px`;
-        grid.style.margin = '0 auto';
-
-        for (let row = 0; row < GRID_SIZE; row++) {
-            for (let col = 0; col < WORD_LENGTH; col++) {
-                const cell = document.createElement('div');
-                cell.classList.add('cell');
-                cell.dataset.row = row;
-                cell.dataset.col = col;
-                grid.appendChild(cell);
-            }
-        }
+      grid.appendChild(cell);
     }
+  }
+}
 
-    function createKeyboard() {
-        const keys = [
-            ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-            ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-            ['Enter', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Backspace']
-        ];
+// Initialize the keyboard
+function createKeyboard() {
+  const keys = [
+    ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+    ['Enter', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Backspace']
+  ];
 
-        keyboard.style.display = 'flex';
-        keyboard.style.flexDirection = 'column';
-        keyboard.style.alignItems = 'center';
-        keyboard.style.gap = '6px';
-        keyboard.style.width = "100%";
+  keyboard.style.display = 'flex';
+  keyboard.style.flexDirection = 'column';
+  keyboard.style.alignItems = 'center';
+  keyboard.style.gap = '6px';
 
-        keys.forEach(row => {
-            const rowDiv = document.createElement('div');
-            rowDiv.style.display = 'flex';
-            rowDiv.style.justifyContent = 'center';
-            rowDiv.style.gap = '6px';
+  keys.forEach((row, rowIndex) => {
+    const rowDiv = document.createElement('div');
+    rowDiv.style.display = 'flex';
+    rowDiv.style.justifyContent = 'center';
+    rowDiv.style.gap = '6px';
 
-            row.forEach(key => {
-                const button = document.createElement('button');
-                button.textContent = key;
-                button.classList.add('key');
+    row.forEach(key => {
+      const button = document.createElement('button');
+      button.textContent = key;
+      button.classList.add('key');
 
-                button.style.padding = '8px 12px';
-                button.style.fontSize = '14px';
-                button.style.fontWeight = 'bold';
-                button.style.backgroundColor = '#d3d6da';
-                button.style.border = 'none';
-                button.style.borderRadius = '5px';
-                button.style.cursor = 'pointer';
-                button.style.textTransform = 'uppercase';
-                button.style.color = '#000';
-                button.style.transition = 'background-color 0.3s ease';
+      // Add styling for the keyboard keys
+      button.style.padding = '10px 15px';
+      button.style.fontSize = '16px';
+      button.style.fontWeight = 'bold';
+      button.style.backgroundColor = '#d3d6da';
+      button.style.border = 'none';
+      button.style.borderRadius = '5px';
+      button.style.cursor = 'pointer';
+      button.style.textTransform = 'uppercase';
+      button.style.color = '#000';
+      button.style.transition = 'background-color 0.3s ease';
 
-                if (key === 'Enter' || key === 'Backspace') {
-                    button.style.padding = '8px 16px';
-                    button.style.fontSize = '14px';
-                }
+      // Special styling for Enter and Backspace keys
+      if (key === 'Enter' || key === 'Backspace') {
+        button.style.padding = '10px 20px';
+        button.style.fontSize = '14px';
+      }
 
-                button.addEventListener('click', () => handleKeyPress(key));
-                rowDiv.appendChild(button);
-            });
+      button.addEventListener('click', () => handleKeyPress(key));
+      rowDiv.appendChild(button);
+    });
 
-            keyboard.appendChild(rowDiv);
-        });
+    keyboard.appendChild(rowDiv);
+  });
+}
 
-        setTimeout(disableKeyboard, 0);
+// Handle key press (from keyboard or virtual keyboard)
+let currentRow = 0;
+let currentCol = 0;
+
+function handleKeyPress(key) {
+  if (key === 'Backspace') {
+    if (currentCol > 0) {
+      currentCol--;
+      const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${currentCol}']`);
+      cell.textContent = '';
     }
-
-    function handleKeyPress(key) {
-        if (gameOver) return;
-
-        if (key === 'Backspace') {
-            if (currentCol > 0) {
-                currentCol--;
-                const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${currentCol}']`);
-                cell.textContent = '';
-            }
-        } else if (key === 'Enter') {
-            if (currentCol === WORD_LENGTH) {
-                checkGuess();
-                currentRow++;
-                currentCol = 0;
-            } else {
-                showMessage('Not enough letters!');
-            }
-        } else if (currentCol < WORD_LENGTH) {
-            const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${currentCol}']`);
-            cell.textContent = key;
-            currentCol++;
-        }
-    }
-
-    function checkGuess() {
-        let correct = true;
-        for (let col = 0; col < WORD_LENGTH; col++) {
-            const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${col}']`);
-            const letter = cell.textContent;
-            if (letter === targetWord[col]) {
-                cell.classList.add('correct');
-            } else if (targetWord.includes(letter)) {
-                cell.classList.add('present');
-                correct = false;
-            } else {
-                cell.classList.add('absent');
-                correct = false;
-            }
-        }
-
-        if (correct) {
-            showMessage(levels[currentLevel].message, true);
-            setTimeout(nextLevel, 3000);
-        } else if (currentRow === GRID_SIZE - 1) {
-            gameOver = true;
-            showMessage(`Game over! The word was ${targetWord}. Try again this level.`, true);
-            disableKeyboard();
-            setTimeout(() => {
-              resetLevel();
-            }, 5000);
-        }
-    }
-
-    function nextLevel() {
-        currentLevel++;
-        if (currentLevel < levels.length) {
-            targetWord = levels[currentLevel].word;
-            currentRow = 0;
-            currentCol = 0;
-            gameOver = false;
-            resetGrid();
-            enableKeyboard();
-            showMessage(levels[currentLevel].message, true);
-            closePopup();
-        } else {
-            showMessage("Congratulations! You've completed all levels!", true);
-            disableKeyboard();
-            document.getElementById('popup-next-level').style.display = 'none';
-            document.getElementById('popup-try-again').style.display = 'none';
-        }
-    }
-
-    function resetLevel(){
-      currentRow = 0;
+  } else if (key === 'Enter') {
+    if (currentCol === WORD_LENGTH) {
+      checkGuess();
+      currentRow++;
       currentCol = 0;
-      gameOver = false;
-      resetGrid();
-      enableKeyboard();
-      closePopup();
+    } else {
+      showMessage('Not enough letters!');
     }
+  } else if (currentCol < WORD_LENGTH) {
+    const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${currentCol}']`);
+    cell.textContent = key;
+    currentCol++;
+  }
+}
 
-    function resetGrid() {
-        const cells = document.querySelectorAll('.cell');
-        cells.forEach(cell => {
-            cell.textContent = '';
-            cell.classList.remove('correct', 'present', 'absent');
-        });
+// Check the guess against the target word
+function checkGuess() {
+  let correct = true;
+  for (let col = 0; col < WORD_LENGTH; col++) {
+    const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${col}']`);
+    const letter = cell.textContent;
+    if (letter === targetWord[col]) {
+      cell.style.backgroundColor = '#6aaa64'; // Green for correct
+      cell.style.borderColor = '#6aaa64';
+      cell.style.color = '#fff';
+    } else if (targetWord.includes(letter)) {
+      cell.style.backgroundColor = '#c9b458'; // Yellow for misplaced
+      cell.style.borderColor = '#c9b458';
+      cell.style.color = '#fff';
+      correct = false;
+    } else {
+      cell.style.backgroundColor = '#787c7e'; // Gray for incorrect
+      cell.style.borderColor = '#787c7e';
+      cell.style.color = '#fff';
+      correct = false;
     }
+  }
 
-    function enableKeyboard(){
-      const keys = document.querySelectorAll('.key');
-      keys.forEach(key => {
-        key.disabled = false;
-      });
-    }
+  if (correct) {
+    showMessage('You win!');
+    disableKeyboard(); // Disable keyboard after winning
+  } else if (currentRow === GRID_SIZE - 1) {
+    showMessage(`Game over! The word was ${targetWord}.`);
+    disableKeyboard(); // Disable keyboard after losing
+  }
+}
 
-    function showMessage(text, isPopup = false) {
-        if (isPopup) {
-            document.getElementById('popup-message').textContent = text;
-            document.getElementById('popup').style.display = 'flex';
+// Show a message and clear it after a delay
+function showMessage(text) {
+  message.textContent = text;
+  setTimeout(() => {
+    message.textContent = '';
+  }, 3000);
+}
 
-            if (text.includes("Game over")) {
-                document.getElementById('popup-next-level').style.display = 'none';
-                document.getElementById('popup-try-again').style.display = 'inline-block';
-            } else {
-                document.getElementById('popup-next-level').style.display = 'inline-block';
-                document.getElementById('popup-try-again').style.display = 'none';
-            }
+// Disable keyboard after game ends
+function disableKeyboard() {
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => {
+    key.disabled = true;
+  });
+}
 
-        } else {
-            message.textContent = text;
-            setTimeout(() => {
-                message.textContent = '';
-            }, 3000);
-        }
-    }
-
-    createGrid();
-    createKeyboard();
-});
+// Initialize the game
+createGrid();
+createKeyboard();
