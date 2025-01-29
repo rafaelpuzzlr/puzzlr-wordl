@@ -4,9 +4,21 @@ const message = document.getElementById('message');
 
 const WORD_LENGTH = 5;
 const GRID_SIZE = 6;
-const targetWord = 'CRANE';
 
-// Initialize the grid
+const levels = [
+    { word: 'CRANE', message: "Let's start with an easy one!" },
+    { word: 'STOUR', message: "A bit harder now. Good luck!" },
+    { word: 'GLYPH', message: "Things are getting tricky!" },
+    { word: 'FJORD', message: "Almost there. Can you crack this?" },
+    { word: 'ZAPPY', message: "You're a true Wordle master!" },
+];
+
+let currentLevel = 0;
+let targetWord = levels[currentLevel].word;
+let currentRow = 0;
+let currentCol = 0;
+let gameOver = false;
+
 function createGrid() {
     const titleElement = document.createElement('h1');
     titleElement.id = 'title';
@@ -14,7 +26,7 @@ function createGrid() {
     titleElement.style.textAlign = "center";
     titleElement.style.marginBottom = "10px";
     titleElement.style.fontSize = "24px";
-    document.body.insertBefore(titleElement, grid);  // Insert title before grid
+    document.body.insertBefore(titleElement, grid);
 
     grid.style.display = 'grid';
     grid.style.gridTemplateColumns = `repeat(${WORD_LENGTH}, 1fr)`;
@@ -29,25 +41,10 @@ function createGrid() {
             cell.classList.add('cell');
             cell.dataset.row = row;
             cell.dataset.col = col;
-
-            cell.style.width = '60px';
-            cell.style.height = '60px';
-            cell.style.display = 'flex';
-            cell.style.justifyContent = 'center';
-            cell.style.alignItems = 'center';
-            cell.style.fontSize = '32px';
-            cell.style.fontWeight = 'bold';
-            cell.style.backgroundColor = '#fff';
-            cell.style.border = '2px solid #d3d6da';
-            cell.style.textTransform = 'uppercase';
-            cell.style.color = '#000';
-            cell.style.transition = 'background-color 0.3s ease, border-color 0.3s ease';
-
             grid.appendChild(cell);
         }
     }
 }
-
 
 function createKeyboard() {
     const keys = [
@@ -96,10 +93,9 @@ function createKeyboard() {
     });
 }
 
-let currentRow = 0;
-let currentCol = 0;
-
 function handleKeyPress(key) {
+    if (gameOver) return;
+
     if (key === 'Backspace') {
         if (currentCol > 0) {
             currentCol--;
@@ -127,29 +123,66 @@ function checkGuess() {
         const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${col}']`);
         const letter = cell.textContent;
         if (letter === targetWord[col]) {
-            cell.style.backgroundColor = '#6aaa64';
-            cell.style.borderColor = '#6aaa64';
-            cell.style.color = '#fff';
+            cell.classList.add('correct');
         } else if (targetWord.includes(letter)) {
-            cell.style.backgroundColor = '#c9b458';
-            cell.style.borderColor = '#c9b458';
-            cell.style.color = '#fff';
+            cell.classList.add('present');
             correct = false;
         } else {
-            cell.style.backgroundColor = '#787c7e';
-            cell.style.borderColor = '#787c7e';
-            cell.style.color = '#fff';
+            cell.classList.add('absent');
             correct = false;
         }
     }
 
     if (correct) {
-        showMessage('You win!');
-        disableKeyboard();
+        showMessage(levels[currentLevel].message);
+        setTimeout(nextLevel, 3000);
     } else if (currentRow === GRID_SIZE - 1) {
-        showMessage(`Game over! The word was ${targetWord}.`);
+        gameOver = true;
+        showMessage(`Game over! The word was ${targetWord}. Try again this level.`);
+        disableKeyboard();
+        setTimeout(() => {
+          resetLevel();
+        }, 5000);
+    }
+}
+
+function nextLevel() {
+    currentLevel++;
+    if (currentLevel < levels.length) {
+        targetWord = levels[currentLevel].word;
+        currentRow = 0;
+        currentCol = 0;
+        gameOver = false;
+        resetGrid();
+        enableKeyboard();
+        showMessage(levels[currentLevel].message);
+    } else {
+        showMessage("Congratulations! You've completed all levels!");
         disableKeyboard();
     }
+}
+
+function resetLevel(){
+  currentRow = 0;
+  currentCol = 0;
+  gameOver = false;
+  resetGrid();
+  enableKeyboard();
+}
+
+function resetGrid() {
+    const cells = document.querySelectorAll('.cell');
+    cells.forEach(cell => {
+        cell.textContent = '';
+        cell.classList.remove('correct', 'present', 'absent');
+    });
+}
+
+function enableKeyboard(){
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => {
+    key.disabled = false;
+  });
 }
 
 function showMessage(text) {
@@ -168,3 +201,4 @@ function disableKeyboard() {
 
 createGrid();
 createKeyboard();
+showMessage(levels[currentLevel].message);
