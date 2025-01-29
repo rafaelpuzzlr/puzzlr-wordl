@@ -8,11 +8,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Georgia&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div id="game">
-    <div id="grid"></div>
-    <div id="keyboard"></div>
-    <button id="submit-button">Submit</button>
-    <div id="message"></div>
+  <div class="container">
+    <header>
+      <h1>Wordle Clone</h1>
+    </header>
+    <main>
+      <section class="game-info">
+        <div class="info-box">Current Rank: #1</div>
+        <div class="info-box">Next Puzzle: 12h 30m</div>
+        <div class="info-box">Rewards: 500 Coins</div>
+      </section>
+      <section id="game">
+        <div id="grid"></div>
+        <div id="keyboard"></div>
+        <button id="submit-button">Submit</button>
+        <div id="message"></div>
+      </section>
+    </main>
   </div>
   <script src="script.js"></script>
 </body>
