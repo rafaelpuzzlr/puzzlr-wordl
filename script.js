@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function createGrid() {
         const titleElement = document.createElement('h1');
         titleElement.id = 'title';
-        titleElement.textContent = "Daily Wordle";
+        titleElement.textContent = "Daily Wordl";
         titleElement.style.textAlign = "center";
         titleElement.style.marginBottom = "10px";
         titleElement.style.fontSize = "24px";
@@ -99,4 +99,125 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         setTimeout(disableKeyboard, 0);
-   
+    }
+
+    function handleKeyPress(key) {
+        if (gameOver) return;
+
+        if (key === 'Backspace') {
+            if (currentCol > 0) {
+                currentCol--;
+                const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${currentCol}']`);
+                cell.textContent = '';
+            }
+        } else if (key === 'Enter') {
+            if (currentCol === WORD_LENGTH) {
+                checkGuess();
+                currentRow++;
+                currentCol = 0;
+            } else {
+                showMessage('Not enough letters!');
+            }
+        } else if (currentCol < WORD_LENGTH) {
+            const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${currentCol}']`);
+            cell.textContent = key;
+            currentCol++;
+        }
+    }
+
+    function checkGuess() {
+        let correct = true;
+        for (let col = 0; col < WORD_LENGTH; col++) {
+            const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${col}']`);
+            const letter = cell.textContent;
+            if (letter === targetWord[col]) {
+                cell.classList.add('correct');
+            } else if (targetWord.includes(letter)) {
+                cell.classList.add('present');
+                correct = false;
+            } else {
+                cell.classList.add('absent');
+                correct = false;
+            }
+        }
+
+        if (correct) {
+            showMessage(levels[currentLevel].message, true);
+            setTimeout(nextLevel, 3000);
+        } else if (currentRow === GRID_SIZE - 1) {
+            gameOver = true;
+            showMessage(`Game over! The word was ${targetWord}. Try again this level.`, true);
+            disableKeyboard();
+            setTimeout(() => {
+              resetLevel();
+            }, 5000);
+        }
+    }
+
+    function nextLevel() {
+        currentLevel++;
+        if (currentLevel < levels.length) {
+            targetWord = levels[currentLevel].word;
+            currentRow = 0;
+            currentCol = 0;
+            gameOver = false;
+            resetGrid();
+            enableKeyboard();
+            showMessage(levels[currentLevel].message, true);
+            closePopup();
+        } else {
+            showMessage("Congratulations! You've completed all levels!", true);
+            disableKeyboard();
+            document.getElementById('popup-next-level').style.display = 'none';
+            document.getElementById('popup-try-again').style.display = 'none';
+        }
+    }
+
+    function resetLevel(){
+      currentRow = 0;
+      currentCol = 0;
+      gameOver = false;
+      resetGrid();
+      enableKeyboard();
+      closePopup();
+    }
+
+    function resetGrid() {
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach(cell => {
+            cell.textContent = '';
+            cell.classList.remove('correct', 'present', 'absent');
+        });
+    }
+
+    function enableKeyboard(){
+      const keys = document.querySelectorAll('.key');
+      keys.forEach(key => {
+        key.disabled = false;
+      });
+    }
+
+    function showMessage(text, isPopup = false) {
+        if (isPopup) {
+            document.getElementById('popup-message').textContent = text;
+            document.getElementById('popup').style.display = 'flex';
+
+            if (text.includes("Game over")) {
+                document.getElementById('popup-next-level').style.display = 'none';
+                document.getElementById('popup-try-again').style.display = 'inline-block';
+            } else {
+                document.getElementById('popup-next-level').style.display = 'inline-block';
+                document.getElementById('popup-try-again').style.display = 'none';
+            }
+
+        } else {
+            message.textContent = text;
+            setTimeout(() => {
+                message.textContent = '';
+            }, 3000);
+        }
+    }
+
+    createGrid();
+    createKeyboard();
+});
