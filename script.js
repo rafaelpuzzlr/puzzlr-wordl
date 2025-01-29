@@ -15,6 +15,21 @@ function createGrid() {
       cell.classList.add('cell');
       cell.dataset.row = row;
       cell.dataset.col = col;
+
+      // Add styling for the grid cells
+      cell.style.width = '60px';
+      cell.style.height = '60px';
+      cell.style.display = 'flex';
+      cell.style.justifyContent = 'center';
+      cell.style.alignItems = 'center';
+      cell.style.fontSize = '24px';
+      cell.style.fontWeight = 'bold';
+      cell.style.backgroundColor = '#fff';
+      cell.style.border = '2px solid #ddd';
+      cell.style.textTransform = 'uppercase';
+      cell.style.color = '#333';
+      cell.style.transition = 'background-color 0.3s ease, border-color 0.3s ease';
+
       grid.appendChild(cell);
     }
   }
@@ -28,16 +43,34 @@ function createKeyboard() {
     ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
   ];
 
-  keys.forEach(row => {
+  keys.forEach((row, rowIndex) => {
     const rowDiv = document.createElement('div');
-    rowDiv.classList.add('keyboard-row');
+    rowDiv.style.display = 'flex';
+    rowDiv.style.justifyContent = 'center';
+    rowDiv.style.gap = '6px';
+    rowDiv.style.marginBottom = '6px';
+
     row.forEach(key => {
       const button = document.createElement('button');
       button.textContent = key;
       button.classList.add('key');
+
+      // Add styling for the keyboard keys
+      button.style.width = '40px';
+      button.style.height = '50px';
+      button.style.fontSize = '16px';
+      button.style.fontWeight = 'bold';
+      button.style.backgroundColor = '#f0f0f0';
+      button.style.border = '2px solid #ddd';
+      button.style.cursor = 'pointer';
+      button.style.textTransform = 'uppercase';
+      button.style.color = '#333';
+      button.style.transition = 'background-color 0.3s ease, border-color 0.3s ease';
+
       button.addEventListener('click', () => handleKeyPress(key));
       rowDiv.appendChild(button);
     });
+
     keyboard.appendChild(rowDiv);
   });
 }
@@ -73,12 +106,18 @@ function checkGuess() {
     const cell = document.querySelector(`.cell[data-row='${currentRow}'][data-col='${col}']`);
     const letter = cell.textContent;
     if (letter === targetWord[col]) {
-      cell.classList.add('correct');
+      cell.style.backgroundColor = '#4caf50'; // Green for correct
+      cell.style.borderColor = '#4caf50';
+      cell.style.color = '#fff';
     } else if (targetWord.includes(letter)) {
-      cell.classList.add('misplaced');
+      cell.style.backgroundColor = '#ffeb3b'; // Yellow for misplaced
+      cell.style.borderColor = '#ffeb3b';
+      cell.style.color = '#333';
       correct = false;
     } else {
-      cell.classList.add('incorrect');
+      cell.style.backgroundColor = '#ccc'; // Gray for incorrect
+      cell.style.borderColor = '#ccc';
+      cell.style.color = '#fff';
       correct = false;
     }
   }
