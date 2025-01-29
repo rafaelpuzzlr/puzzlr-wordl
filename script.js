@@ -6,11 +6,11 @@ const WORD_LENGTH = 5;
 const GRID_SIZE = 6;
 
 const levels = [
-    { word: 'CRANE', message: "Let's start with an easy one!" },
-    { word: 'STOUR', message: "A bit harder now. Good luck!" },
-    { word: 'GLYPH', message: "Things are getting tricky!" },
-    { word: 'FJORD', message: "Almost there. Can you crack this?" },
-    { word: 'ZAPPY', message: "You're a true Wordle master!" },
+    { word: 'APPLE', message: "Let's start with an easy one!" },
+    { word: 'BREAD', message: "A bit harder now. Good luck!" },
+    { word: 'DANCE', message: "Things are getting tricky!" },
+    { word: 'CHAIR', message: "Almost there. Can you crack this?" },
+    { word: 'HARRY', message: "You're a true Wordle master!" },
 ];
 
 let currentLevel = 0;
@@ -32,7 +32,7 @@ function createGrid() {
     grid.style.gridTemplateColumns = `repeat(${WORD_LENGTH}, 1fr)`;
     grid.style.gap = '2px';
     grid.style.marginBottom = '20px';
-    grid.style.width = `${WORD_LENGTH * 62}px`;
+    grid.style.width = `${WORD_LENGTH * 52}px`; // Adjusted width for smaller cells
     grid.style.margin = '0 auto';
 
     for (let row = 0; row < GRID_SIZE; row++) {
@@ -57,6 +57,7 @@ function createKeyboard() {
     keyboard.style.flexDirection = 'column';
     keyboard.style.alignItems = 'center';
     keyboard.style.gap = '6px';
+    keyboard.style.width = "100%"; // Keyboard takes full width
 
     keys.forEach(row => {
         const rowDiv = document.createElement('div');
@@ -69,8 +70,8 @@ function createKeyboard() {
             button.textContent = key;
             button.classList.add('key');
 
-            button.style.padding = '10px 15px';
-            button.style.fontSize = '16px';
+            button.style.padding = '8px 12px'; // Smaller padding
+            button.style.fontSize = '14px'; // Smaller font size
             button.style.fontWeight = 'bold';
             button.style.backgroundColor = '#d3d6da';
             button.style.border = 'none';
@@ -81,7 +82,7 @@ function createKeyboard() {
             button.style.transition = 'background-color 0.3s ease';
 
             if (key === 'Enter' || key === 'Backspace') {
-                button.style.padding = '10px 20px';
+                button.style.padding = '8px 16px'; // Adjusted padding for Enter/Backspace
                 button.style.fontSize = '14px';
             }
 
@@ -134,11 +135,11 @@ function checkGuess() {
     }
 
     if (correct) {
-        showMessage(levels[currentLevel].message);
+        showMessage(levels[currentLevel].message, true);
         setTimeout(nextLevel, 3000);
     } else if (currentRow === GRID_SIZE - 1) {
         gameOver = true;
-        showMessage(`Game over! The word was ${targetWord}. Try again this level.`);
+        showMessage(`Game over! The word was ${targetWord}. Try again this level.`, true);
         disableKeyboard();
         setTimeout(() => {
           resetLevel();
@@ -155,10 +156,14 @@ function nextLevel() {
         gameOver = false;
         resetGrid();
         enableKeyboard();
-        showMessage(levels[currentLevel].message);
+        showMessage(levels[currentLevel].message, true);
+        closePopup(); // Close popup after next level is set up
     } else {
-        showMessage("Congratulations! You've completed all levels!");
+        showMessage("Congratulations! You've completed all levels!", true);
         disableKeyboard();
+        document.getElementById('popup-next-level').style.display = 'none';
+        document.getElementById('popup-try-again').style.display = 'none';
+
     }
 }
 
@@ -168,6 +173,7 @@ function resetLevel(){
   gameOver = false;
   resetGrid();
   enableKeyboard();
+  closePopup();
 }
 
 function resetGrid() {
@@ -185,20 +191,37 @@ function enableKeyboard(){
   });
 }
 
-function showMessage(text) {
-    message.textContent = text;
-    setTimeout(() => {
-        message.textContent = '';
-    }, 3000);
+function showMessage(text, isPopup = false) {
+    if (isPopup) {
+        document.getElementById('popup-message').textContent = text;
+        document.getElementById('popup').style.display = 'flex';
+
+        if (text.includes("Game over")) {
+            document.getElementById('popup-next-level').style.display = 'none';
+            document.getElementById('popup-try-again').style.display = 'inline-block';
+        } else {
+            document.getElementById('popup-next-level').style.display = 'inline-block';
+            document.getElementById('popup-try-again').style.display = 'none';
+        }
+
+    } else {
+        message.textContent = text;
+        setTimeout(() => {
+            message.textContent = '';
+        }, 3000);
+    }
 }
 
-function disableKeyboard() {
-    const keys = document.querySelectorAll('.key');
-    keys.forEach(key => {
-        key.disabled = true;
-    });
+function closePopup() {
+    document.getElementById('popup').style.display = 'none';
 }
+
+document.getElementById('popup-next-level').addEventListener('click', closePopup);
+document.getElementById('popup-try-again').addEventListener('click', closePopup);
+
+
+disableKeyboard(); //Disable keyboard initially
 
 createGrid();
 createKeyboard();
-showMessage(levels[currentLevel].message);
+showMessage(levels[currentLevel].message, true); // Initial message as popup
