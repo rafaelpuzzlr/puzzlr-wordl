@@ -182,13 +182,11 @@ document.addEventListener('DOMContentLoaded', function() {
             cell.textContent = '';
             cell.classList.remove('correct', 'present', 'absent');
         });
-    }
+   }
 
-    function enableKeyboard(){
-      const keys = document.querySelectorAll('.key');
-      keys.forEach(key => {
-        key.disabled = false;
-      });
+    function enableKeyboard() {
+        const keys = document.querySelectorAll('.key');
+        keys.forEach(key => key.disabled = false);
     }
 
     function showMessage(text, isPopup = false) {
@@ -216,13 +214,11 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('popup').style.display = 'none';
     }
 
-    document.getElementById('popup-next-level').addEventListener('click', closePopup);
+   document.getElementById('popup-next-level').addEventListener('click', closePopup);
     document.getElementById('popup-try-again').addEventListener('click', closePopup);
 
 
-    disableKeyboard();
-
-    createGrid();
-    createKeyboard();
-    showMessage(levels[currentLevel].message, true);
-}); // End of DOMContentLoaded event listener
+    createGrid(); // Create the grid FIRST
+    createKeyboard(); // Then create the keyboard
+    disableKeyboard(); // THEN disable the keyboard (now that it exists)
+    showMessage(levels[currentLevel].message, true); // Initial message
