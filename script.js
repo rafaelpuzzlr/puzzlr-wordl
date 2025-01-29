@@ -1,6 +1,5 @@
 const grid = document.getElementById('grid');
 const keyboard = document.getElementById('keyboard');
-const submitButton = document.getElementById('submit-button');
 const message = document.getElementById('message');
 
 const WORD_LENGTH = 5;
