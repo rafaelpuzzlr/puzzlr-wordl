@@ -19,21 +19,6 @@ function createGrid() {
       cell.classList.add('cell');
       cell.dataset.row = row;
       cell.dataset.col = col;
-
-      // Add styling for the grid cells
-      cell.style.width = '60px';
-      cell.style.height = '60px';
-      cell.style.display = 'flex';
-      cell.style.justifyContent = 'center';
-      cell.style.alignItems = 'center';
-      cell.style.fontSize = '32px';
-      cell.style.fontWeight = 'bold';
-      cell.style.backgroundColor = '#fff';
-      cell.style.border = '2px solid #d3d6da';
-      cell.style.textTransform = 'uppercase';
-      cell.style.color = '#000';
-      cell.style.transition = 'background-color 0.3s ease, border-color 0.3s ease';
-
       grid.appendChild(cell);
     }
   }
@@ -47,12 +32,7 @@ function createKeyboard() {
     ['Enter', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Delete']
   ];
 
-  keyboard.style.display = 'flex';
-  keyboard.style.flexDirection = 'column';
-  keyboard.style.alignItems = 'center';
-  keyboard.style.gap = '6px';
-
-  keys.forEach((row, rowIndex) => {
+  keys.forEach(row => {
     const rowDiv = document.createElement('div');
     rowDiv.style.display = 'flex';
     rowDiv.style.justifyContent = 'center';
@@ -62,24 +42,6 @@ function createKeyboard() {
       const button = document.createElement('button');
       button.textContent = key;
       button.classList.add('key');
-
-      // Add styling for the keyboard keys
-      button.style.padding = '10px 15px';
-      button.style.fontSize = '16px';
-      button.style.fontWeight = 'bold';
-      button.style.backgroundColor = '#d3d6da';
-      button.style.border = 'none';
-      button.style.borderRadius = '5px';
-      button.style.cursor = 'pointer';
-      button.style.textTransform = 'uppercase';
-      button.style.color = '#000';
-      button.style.transition = 'background-color 0.3s ease';
-
-      // Special styling for Enter and Backspace keys
-      if (key === 'Enter' || key === 'Backspace') {
-        button.style.padding = '10px 20px';
-        button.style.fontSize = '14px';
-      }
 
       button.addEventListener('click', () => handleKeyPress(key));
       rowDiv.appendChild(button);
@@ -140,10 +102,10 @@ function checkGuess() {
 
   if (correct) {
     showMessage('You win!');
-    disableKeyboard(); // Disable keyboard after winning
+    disableKeyboard();
   } else if (currentRow === GRID_SIZE - 1) {
     showMessage(`Game over! The word was ${targetWord}.`);
-    disableKeyboard(); // Disable keyboard after losing
+    disableKeyboard();
   }
 }
 
