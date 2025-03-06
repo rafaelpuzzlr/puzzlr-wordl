@@ -3,10 +3,12 @@ const keyboard = document.getElementById('keyboard');
 const message = document.getElementById('message');
 const introScreen = document.getElementById('intro-screen');
 const gameScreen = document.getElementById('game-screen');
+const statsModal = document.getElementById('stats-modal');
+const closeModal = document.querySelector('.close');
 
-const WORD_LENGTH = 5;
-const GRID_SIZE = 6; // Wordle uses 6 rows
-const targetWord = 'HARRY'; // Example target word (can be randomized later)
+let currentRow = 0;
+let currentCol = 0;
+let guessDistribution = [0, 0, 0, 0, 0, 0];
 
 // Initialize the grid
 function createGrid() {
@@ -54,9 +56,6 @@ function createKeyboard() {
 }
 
 // Handle key press (from keyboard or virtual keyboard)
-let currentRow = 0;
-let currentCol = 0;
-
 function handleKeyPress(key) {
   if (key === 'Delete') {
     if (currentCol > 0) {
@@ -103,6 +102,8 @@ function checkGuess() {
   }
 
   if (correct) {
+    guessDistribution[currentRow]++;
+    showStatsModal();
     showMessage('You win!');
     disableKeyboard();
   } else if (currentRow === GRID_SIZE - 1) {
@@ -111,21 +112,20 @@ function checkGuess() {
   }
 }
 
-// Show a message and clear it after a delay
-function showMessage(text) {
-  message.textContent = text;
-  setTimeout(() => {
-    message.textContent = '';
-  }, 3000);
+// Show stats modal
+function showStatsModal() {
+  const guessBars = document.querySelectorAll('.guess-bar');
+  guessBars.forEach((bar, index) => {
+    bar.textContent = guessDistribution[index];
+    bar.style.width = `${guessDistribution[index] * 20}px`; // Adjust width based on distribution
+  });
+  statsModal.style.display = 'flex';
 }
 
-// Disable keyboard after game ends
-function disableKeyboard() {
-  const keys = document.querySelectorAll('.key');
-  keys.forEach(key => {
-    key.disabled = true;
-  });
-}
+// Close stats modal
+closeModal.addEventListener('click', () => {
+  statsModal.style.display = 'none';
+});
 
 // Initialize the game
 function initializeGame() {
