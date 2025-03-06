@@ -3,19 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> Wordle by Puzzlr</title>
+  <title>Daily Wordle by Puzzlr</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="intro-screen">
-    <h1>Wordle by Puzzlr</h1>
+    <h1>Daily Wordle by Puzzlr</h1>
     <p>Get 6 chances to guess a 5-letter word.</p>
     <button id="play-button">Play</button>
   </div>
 
   <div id="game-screen" style="display: none;">
+    <!-- Navigation Bar -->
+    <div id="nav-bar">
+      <div id="stats-icon" class="icon">📊</div>
+      <div id="help-icon" class="icon">❓</div>
+    </div>
+
     <header>
-      <h1>Wordle by Puzzlr</h1>
+      <h1>Daily Wordle by Puzzlr</h1>
     </header>
     
     <main>
@@ -64,7 +70,20 @@
         <div class="guess-bar" data-guess="6">0</div>
       </div>
       <p>Have questions about stats? Visit our Help Center ></p>
+      <p>Wordle Bot gives an analysis of your guesses. Did you beat the bot? ></p>
       <button id="share-button">Share ✅</button>
+    </div>
+  </div>
+
+  <!-- Help Pop-up Modal -->
+  <div id="help-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>How to Play</h2>
+      <p>Guess the hidden 5-letter word.</p>
+      <p>Use the on-screen keyboard to input your guess.</p>
+      <p>Submit your guess to see if it matches the target word.</p>
+      <p><strong>Tip of the Day:</strong> Modesto me mama.</p>
     </div>
   </div>
 
