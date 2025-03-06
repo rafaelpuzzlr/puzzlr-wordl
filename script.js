@@ -1,6 +1,8 @@
 const grid = document.getElementById('grid');
 const keyboard = document.getElementById('keyboard');
 const message = document.getElementById('message');
+const introScreen = document.getElementById('intro-screen');
+const gameScreen = document.getElementById('game-screen');
 
 const WORD_LENGTH = 5;
 const GRID_SIZE = 6; // Wordle uses 6 rows
@@ -126,5 +128,14 @@ function disableKeyboard() {
 }
 
 // Initialize the game
-createGrid();
-createKeyboard();
+function initializeGame() {
+  createGrid();
+  createKeyboard();
+}
+
+// Event listener for the Play button
+document.getElementById('play-button').addEventListener('click', function() {
+  introScreen.style.display = 'none';
+  gameScreen.style.display = 'block';
+  initializeGame();
+});
