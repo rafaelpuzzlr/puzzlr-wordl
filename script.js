@@ -130,15 +130,5 @@ closeModal.addEventListener('click', () => {
   statsModal.style.display = 'none';
 });
 
-// Initialize the game
-function initializeGame() {
-  createGrid();
-  createKeyboard();
-}
-
-// Event listener for the Play button
-document.getElementById('play-button').addEventListener('click', function() {
-  introScreen.style.display = 'none';
-  gameScreen.style.display = 'block';
-  initializeGame();
-});
+// Close modal if user clicks outside of it
+window.addEventListener('click', (event) =>
