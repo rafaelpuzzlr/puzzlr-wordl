@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Wordle</title>
+  <title>Daily Wordle by Puzzlr</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="intro-screen">
-    <h1>Daily Wordle</h1>
+    <h1>Daily Wordle by Puzzlr</h1>
     <p>Get 6 chances to guess a 5-letter word.</p>
     <button id="play-button">Play</button>
   </div>
 
   <div id="game-screen" style="display: none;">
     <header>
-      <h1>Daily Wordle</h1>
+      <h1>Daily Wordle by Puzzlr</h1>
     </header>
     
     <main>
@@ -29,6 +29,44 @@
     <footer>
       <p>&copy; 2025 Puzzlr</p>
     </footer>
+  </div>
+
+  <!-- Stats Pop-up Modal -->
+  <div id="stats-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Statistics</h2>
+      <div class="stats">
+        <div class="stat-item">
+          <span class="stat-number">1</span>
+          <span class="stat-label">Played</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">100</span>
+          <span class="stat-label">Win %</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">1</span>
+          <span class="stat-label">Current Streak</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">1</span>
+          <span class="stat-label">Max Streak</span>
+        </div>
+      </div>
+      <h3>Guess Distribution</h3>
+      <div class="guess-distribution">
+        <div class="guess-bar" data-guess="1">0</div>
+        <div class="guess-bar" data-guess="2">0</div>
+        <div class="guess-bar" data-guess="3">1</div>
+        <div class="guess-bar" data-guess="4">0</div>
+        <div class="guess-bar" data-guess="5">0</div>
+        <div class="guess-bar" data-guess="6">0</div>
+      </div>
+      <p>Have questions about stats? Visit our Help Center ></p>
+      <p>Wordle Bot gives an analysis of your guesses. Did you beat the bot? ></p>
+      <button id="share-button">Share ✅</button>
+    </div>
   </div>
 
   <script src="script.js"></script>
