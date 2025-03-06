@@ -4,7 +4,10 @@ const message = document.getElementById('message');
 const introScreen = document.getElementById('intro-screen');
 const gameScreen = document.getElementById('game-screen');
 const statsModal = document.getElementById('stats-modal');
-const closeModal = document.querySelector('.close');
+const helpModal = document.getElementById('help-modal');
+const closeModal = document.querySelectorAll('.close');
+const statsIcon = document.getElementById('stats-icon');
+const helpIcon = document.getElementById('help-icon');
 
 const WORD_LENGTH = 5;
 const GRID_SIZE = 6; // Wordle uses 6 rows
@@ -127,15 +130,24 @@ function showStatsModal() {
   statsModal.style.display = 'flex';
 }
 
-// Close stats modal
-closeModal.addEventListener('click', () => {
-  statsModal.style.display = 'none';
+// Show help modal
+function showHelpModal() {
+  helpModal.style.display = 'flex';
+}
+
+// Close modals
+closeModal.forEach(close => {
+  close.addEventListener('click', () => {
+    statsModal.style.display = 'none';
+    helpModal.style.display = 'none';
+  });
 });
 
-// Close modal if user clicks outside of it
+// Close modals if user clicks outside of them
 window.addEventListener('click', (event) => {
-  if (event.target === statsModal) {
+  if (event.target === statsModal || event.target === helpModal) {
     statsModal.style.display = 'none';
+    helpModal.style.display = 'none';
   }
 });
 
@@ -151,3 +163,7 @@ document.getElementById('play-button').addEventListener('click', function() {
   gameScreen.style.display = 'block';
   initializeGame();
 });
+
+// Event listeners for icons
+statsIcon.addEventListener('click', showStatsModal);
+helpIcon.addEventListener('click', showHelpModal);
