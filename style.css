@@ -8,15 +8,6 @@ body {
   background-color: #f0f0f0;
 }
 
-header {
-  background-color: #f0f0f0; /* Original header color */
-  padding: 20px;
-  text-align: center;
-  font-size: 24px;
-  font-weight: bold;
-  color: black;
-}
-
 main {
   display: flex;
   flex-grow: 1;
@@ -139,10 +130,11 @@ footer {
   font-size: 24px;
   cursor: pointer;
   margin-left: 15px;
+  color: #000; /* Black icons */
 }
 
 .icon:hover {
-  opacity: 0.7;
+  opacity: 0.7; /* Hover effect */
 }
 
 /* Modal styles */
