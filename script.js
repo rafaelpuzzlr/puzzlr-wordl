@@ -15,6 +15,7 @@ let guessDistribution = [0, 0, 0, 0, 0, 0];
 
 // Initialize the grid
 function createGrid() {
+  grid.innerHTML = ''; // Clear the grid if it already exists
   grid.style.display = 'grid';
   grid.style.gridTemplateColumns = `repeat(${WORD_LENGTH}, 1fr)`;
   grid.style.gap = '5px';
@@ -33,6 +34,7 @@ function createGrid() {
 
 // Initialize the keyboard
 function createKeyboard() {
+  keyboard.innerHTML = ''; // Clear the keyboard if it already exists
   const keys = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
     ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
@@ -131,4 +133,21 @@ closeModal.addEventListener('click', () => {
 });
 
 // Close modal if user clicks outside of it
-window.addEventListener('click', (event) =>
+window.addEventListener('click', (event) => {
+  if (event.target === statsModal) {
+    statsModal.style.display = 'none';
+  }
+});
+
+// Initialize the game
+function initializeGame() {
+  createGrid();
+  createKeyboard();
+}
+
+// Event listener for the Play button
+document.getElementById('play-button').addEventListener('click', function() {
+  introScreen.style.display = 'none';
+  gameScreen.style.display = 'block';
+  initializeGame();
+});
